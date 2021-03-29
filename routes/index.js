@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
+const userController = require('../controllers/userController');
+
 // Homepage
 router.get('/', (req, res) => res.redirect('/posts'));
 
-// GET sign up form
-router.get('/signup', (req, res) => res.send('Sign up form'));
-
 // POST sign up form
-router.post('/signup', (req, res) => res.send('POST sign up form'));
+router.post('/signup', userController.postSignUpForm);
 
 // GET login form
 router.get('/login', (req, res) => res.send('Login form'));

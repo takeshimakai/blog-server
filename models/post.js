@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const PostSchema = new Schema({
   title: { type: String, required: true },
   body: { type: String, required: true },
-  pushlished: { type: Boolean, required: true },
+  published: { type: Boolean, required: true },
   datePublished: Date
 });
 
