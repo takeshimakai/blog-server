@@ -9,11 +9,8 @@ router.get('/', (req, res) => res.redirect('/posts'));
 // POST sign up form
 router.post('/signup', userController.postSignUpForm);
 
-// GET login form
-router.get('/login', (req, res) => res.send('Login form'));
-
 // POST login form
-router.post('/login', (req, res) => res.send('POST login form'));
+router.post('/login', userController.postLogin);
 
 // Logout
 router.get('/logout', (req, res) => res.send('Logout'));

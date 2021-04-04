@@ -1,7 +1,10 @@
 require('dotenv').config();
+require('./config/passport');
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const passport = require('passport');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -16,6 +19,7 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => console.log('MongoDB connected'));
 
+app.use(passport.initialize());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());

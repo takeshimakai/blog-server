@@ -1,6 +1,9 @@
+require('dotenv').config();
+
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 
@@ -73,3 +76,20 @@ exports.postSignUpForm = [
     };
   }
 ];
+
+exports.postLogin = (req, res, next) => {
+  passport.authenticate('local', { session: false }, (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.json({msg: 'Login failed.'});
+    }
+    req.login(user, { session: false }, (err) => {
+      if (err) {
+        return next(err);
+      }
+      jwt.sign({ user }, process.env.JWT_SECRET, (err, token) => res.json({ user, token }));
+    })
+  })(req, res);
+};
