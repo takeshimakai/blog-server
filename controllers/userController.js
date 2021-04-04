@@ -6,7 +6,9 @@ const User = require('../models/user');
 
 exports.getAdminProfile = (req, res, next) => {
   User.findOne({ isAdmin: true }, (err, admin) => {
-    if (err) return next(err);
+    if (err) {
+      next(err);
+    };
     res.send(admin);
   });
 };
@@ -53,18 +55,20 @@ exports.postSignUpForm = [
       res.send(errors);
     } else {
       bcrypt.hash(req.body.password, 10, (err, hashedPw) => {
-        if (err) return next(err);
-  
-        new User({
-          email: req.body.email,
-          password: hashedPw,
-          username: req.body.username,
-          isAdmin: false
-        }).save(err => {
-          if (err) {
-            res.send('Something went wrong. Unable to create new user.');
-          }
-        });
+        if (err) {
+          next(err)
+        } else {
+          new User({
+            email: req.body.email,
+            password: hashedPw,
+            username: req.body.username,
+            isAdmin: false
+          }).save(err => {
+            if (err) {
+              next(err);
+            }
+          });
+        };
       });
     };
   }
