@@ -83,13 +83,13 @@ exports.postLogin = (req, res, next) => {
       return next(err);
     }
     if (!user) {
-      return res.json({msg: 'Login failed.'});
+      return res.json({ info });
     }
     req.login(user, { session: false }, (err) => {
       if (err) {
         return next(err);
       }
-      jwt.sign({ user }, process.env.JWT_SECRET, (err, token) => res.json({ user, token }));
+      jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: 60 }, (err, token) => res.json({ token }));
     })
   })(req, res);
 };
