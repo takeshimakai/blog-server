@@ -93,3 +93,7 @@ exports.postLogin = (req, res, next) => {
     })
   })(req, res);
 };
+
+exports.logout = (req, res) => {
+  req.logout();
+};
