@@ -80,7 +80,7 @@ exports.postLogin = (req, res, next) => {
       if (err) {
         return next(err);
       }
-      jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: 30 }, (err, token) => res.json({ token }));
+      jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: 30 }, (err, token) => res.json({ token, username: user.username }));
     })
   })(req, res);
 };
