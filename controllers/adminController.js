@@ -34,3 +34,10 @@ exports.createPost = [
     }
   }
 ];
+
+exports.deletePost = (req, res, next) => {
+  Post.findByIdAndDelete(req.params.postId, (err) => {
+    if (err) return next(err);
+    res.redirect('/posts');
+  })
+};
