@@ -1,5 +1,4 @@
 const Post = require('../models/post');
-const Comment = require('../models/comment');
 
 exports.getAllPosts = (req, res, next) => {
   Post.find({}, (err, posts) => {

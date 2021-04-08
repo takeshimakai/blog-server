@@ -7,15 +7,6 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 
-exports.getAdminProfile = (req, res, next) => {
-  User.findOne({ isAdmin: true }, (err, admin) => {
-    if (err) {
-      next(err);
-    };
-    res.send(admin);
-  });
-};
-
 exports.postSignUpForm = [
   body('email')
   .trim()
@@ -89,11 +80,7 @@ exports.postLogin = (req, res, next) => {
       if (err) {
         return next(err);
       }
-      jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: 60 }, (err, token) => res.json({ token }));
+      jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: 30 }, (err, token) => res.json({ token }));
     })
   })(req, res);
-};
-
-exports.logout = (req, res) => {
-  req.logout();
 };

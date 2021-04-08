@@ -6,9 +6,9 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const passport = require('passport');
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const userRouter = require('./routes/user');
 const postsRouter = require('./routes/posts');
+const adminRouter = require('./routes/admin');
 
 const app = express();
 
@@ -24,8 +24,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/user', userRouter);
 app.use('/posts', postsRouter);
+app.use('/admin', passport.authenticate('jwt', { session: false }), adminRouter);
 
 app.listen(5000, () => console.log('listening on port 5000'));
