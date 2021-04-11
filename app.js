@@ -8,7 +8,6 @@ const passport = require('passport');
 
 const userRouter = require('./routes/user');
 const postsRouter = require('./routes/posts');
-const adminRouter = require('./routes/admin');
 
 const app = express();
 
@@ -26,6 +25,5 @@ app.use(cors());
 
 app.use('/user', userRouter);
 app.use('/posts', postsRouter);
-app.use('/admin', passport.authenticate('jwt-admin', { session: false }), adminRouter);
 
 app.listen(5000, () => console.log('listening on port 5000'));
