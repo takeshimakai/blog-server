@@ -13,12 +13,18 @@ router.get('/', postsController.getAllPosts);
 router.post('/', passport.authenticate('jwt-admin', { session: false }), postsController.createPost);
 
 // GET post by ID
-router.get('/:postid', postsController.getPost);
+router.get('/:postId', postsController.getPost);
+
+// UPDATE post
+router.put('/:postId', passport.authenticate('jwt-admin', { session: false }), postsController.updatePost);
 
 // DELETE post
 router.delete('/:postId', passport.authenticate('jwt-admin', { session: false }), postsController.deletePost);
 
-// POST comment
-router.post('/:postid/comments', passport.authenticate('jwt-user', { session: false }), commentsController.createComment);
+// POST create comment
+router.post('/:postId/comments', passport.authenticate('jwt-user', { session: false }), commentsController.createComment);
+
+// DELETE comment
+router.delete('/:postId/comments/:commentId', passport.authenticate('jwt-admin', { session: false }), commentsController.deleteComment);
 
 module.exports = router;

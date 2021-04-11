@@ -1,19 +1,24 @@
 const { body, validationResult } = require('express-validator');
 
 const Post = require('../models/post');
+const Comment = require('../models/comment');
 
-exports.getAllPosts = (req, res, next) => {
+exports.getAllPosts = async (req, res, next) => {
   Post.find({}, (err, posts) => {
     if (err) return next(err);
-    res.send(posts);
+    res.json(posts);
   });
 };
 
 exports.getPost = (req, res, next) => {
-  Post.findById(req.params.id, (err, post) => {
-    if (err) return next(err);
-    res.send('Get post');
-  });
+  Promise.all([
+    Post.findById(req.params.postId),
+    Comment.find({ 'post': req.params.postId }).populate('user', 'username')
+  ])
+  .then(([post, comments]) => {
+    res.json({ post, comments });
+  })
+  .catch(err => next(err));
 };
 
 exports.createPost = [
@@ -33,7 +38,7 @@ exports.createPost = [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res.send(errors);
+      res.json(errors);
     } else {
       new Post({
         title: req.body.title,
@@ -44,14 +49,52 @@ exports.createPost = [
         if (err) {
           next(err);
         }
+        res.sendStatus(200);
       })
     }
   }
 ];
 
+exports.updatePost = [
+  body('title')
+  .trim()
+  .notEmpty()
+  .withMessage('Please enter title.')
+  .escape(),
+
+  body('content')
+  .trim()
+  .notEmpty()
+  .withMessage('Please enter content.')
+  .escape(),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.json(errors);
+    } else {
+      const editedPost = new Post({
+        _id: req.params.postId,
+        title: req.body.title,
+        content: req.body.content,
+        published: req.body.published === 'true' ? true : false,
+        datePublished: published ? Date.now() : null
+      });
+
+      Post.findByIdAndUpdate(req.params.id, editedPost, (err) => {
+        if (err) return next(err);
+        res.sendStatus(200);
+      })
+    }
+  }
+]
+
 exports.deletePost = (req, res, next) => {
-  Post.findByIdAndDelete(req.params.postId, (err) => {
-    if (err) return next(err);
-    res.redirect('/posts');
-  })
+  Promise.all([
+    Post.findByIdAndDelete(req.params.postId),
+    Comment.deleteMany({ 'post': req.params.postId })
+  ])
+  .then(res.sendStatus(200))
+  .catch(err => next(err));
 };

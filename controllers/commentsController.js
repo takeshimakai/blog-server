@@ -2,13 +2,6 @@ const { body, validationResult } = require('express-validator');
 
 const Comment = require('../models/comment');
 
-exports.getComments = (req, res, next) => {
-  Comment.find({ 'post': req.params.id }, (err, comments) => {
-    if (err) return next(err);
-    res.send(comments);
-  })
-};
-
 exports.createComment = [
   body('comment')
   .trim()
@@ -20,15 +13,23 @@ exports.createComment = [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res.send(errors);
+      res.json(errors);
     } else {
       new Comment({
-        username: req.body.username,
-        post: req.params.id,
+        user: req.body.user,
+        post: req.body.postId,
         comment: req.body.comment
       }).save(err => {
         if (err) return next(err);
+        res.sendStatus(200);
       })
     }
   }
 ];
+
+exports.deleteComment = (req, res, next) => {
+  Comment.findByIdAndDelete(req.params.commentId, (err) => {
+    if (err) return next(err);
+    res.sendStatus(200);
+  })
+}

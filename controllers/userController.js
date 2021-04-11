@@ -46,7 +46,7 @@ exports.postSignUpForm = [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res.send(errors);
+      res.json(errors);
     } else {
       bcrypt.hash(req.body.password, 10, (err, hashedPw) => {
         if (err) {
@@ -56,11 +56,12 @@ exports.postSignUpForm = [
             email: req.body.email,
             password: hashedPw,
             username: req.body.username,
-            isAdmin: false
+            isAdmin: req.body.isAdmin === 'true' ? true : false
           }).save(err => {
             if (err) {
               next(err);
             }
+            res.end();
           });
         };
       });
