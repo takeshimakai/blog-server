@@ -26,7 +26,18 @@ passport.use(new LocalStrategy((username, password, done) => {
   })
 }));
 
-passport.use(new JwtStrategy({
+passport.use('jwt-admin', new JwtStrategy({
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_SECRET
+}, (jwt_payload, done) => {
+  if (jwt_payload.isAdmin) {
+    return done(null, jwt_payload);
+  } else {
+    return done(null, false);
+  }
+}));
+
+passport.use('jwt-user', new JwtStrategy({
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: process.env.JWT_SECRET
 }, (jwt_payload, done) => done(null, jwt_payload)));

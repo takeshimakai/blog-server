@@ -13,6 +13,6 @@ router.get('/', postsController.getAllPosts);
 router.get('/:postid', postsController.getPost);
 
 // POST comment
-router.post('/:postid/new-comment', passport.authenticate('jwt', { session: false }), commentsController.createComment);
+router.post('/:postid/comments', passport.authenticate('jwt-user', { session: false }), commentsController.createComment);
 
 module.exports = router;

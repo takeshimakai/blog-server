@@ -26,6 +26,6 @@ app.use(cors());
 
 app.use('/user', userRouter);
 app.use('/posts', postsRouter);
-app.use('/admin', passport.authenticate('jwt', { session: false }), adminRouter);
+app.use('/admin', passport.authenticate('jwt-admin', { session: false }), adminRouter);
 
 app.listen(5000, () => console.log('listening on port 5000'));
