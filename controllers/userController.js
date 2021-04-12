@@ -61,7 +61,7 @@ exports.postSignUpForm = [
             if (err) {
               next(err);
             }
-            res.end();
+            res.sendStatus(200);
           });
         };
       });
