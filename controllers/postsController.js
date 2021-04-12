@@ -3,6 +3,7 @@ const { body, validationResult } = require('express-validator');
 const Post = require('../models/post');
 const Comment = require('../models/comment');
 
+// Get posts
 exports.getAllPosts = async (req, res, next) => {
   Post.find({}, (err, posts) => {
     if (err) return next(err);
@@ -10,6 +11,7 @@ exports.getAllPosts = async (req, res, next) => {
   });
 };
 
+// Get single post with its comments
 exports.getPost = (req, res, next) => {
   Promise.all([
     Post.findById(req.params.postId),
@@ -21,6 +23,7 @@ exports.getPost = (req, res, next) => {
   .catch(err => next(err));
 };
 
+// Create post
 exports.createPost = [
   body('title')
   .trim()
@@ -55,6 +58,7 @@ exports.createPost = [
   }
 ];
 
+// Edit post
 exports.updatePost = [
   body('title')
   .trim()
@@ -90,6 +94,7 @@ exports.updatePost = [
   }
 ]
 
+// Delete post and its comments
 exports.deletePost = (req, res, next) => {
   Promise.all([
     Post.findByIdAndDelete(req.params.postId),

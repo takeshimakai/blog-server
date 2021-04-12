@@ -2,6 +2,7 @@ const { body, validationResult } = require('express-validator');
 
 const Comment = require('../models/comment');
 
+// Create comment
 exports.createComment = [
   body('comment')
   .trim()
@@ -27,6 +28,7 @@ exports.createComment = [
   }
 ];
 
+// Delete comment
 exports.deleteComment = (req, res, next) => {
   Comment.findByIdAndDelete(req.params.commentId, (err) => {
     if (err) return next(err);
