@@ -75,14 +75,14 @@ exports.postLogin = (req, res, next) => {
       return next(err);
     }
     if (!user) {
-      return res.json({ info });
+      return res.status(401).json(info);
     }
     req.login(user, { session: false }, (err) => {
       if (err) {
         return next(err);
       }
       jwt.sign({ id: user._id, username: user.username, isAdmin: user.isAdmin }, process.env.JWT_SECRET, { expiresIn: 30 }, (err, token) => {
-        res.json({ token })
+        res.json(token)
       });
     })
   })(req, res);
