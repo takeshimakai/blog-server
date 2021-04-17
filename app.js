@@ -8,6 +8,7 @@ const passport = require('passport');
 
 const userRouter = require('./routes/user');
 const postsRouter = require('./routes/posts');
+const commentsRouter = require('./routes/comments');
 
 const app = express();
 
@@ -25,5 +26,6 @@ app.use(cors());
 
 app.use('/user', userRouter);
 app.use('/posts', postsRouter);
+app.use('/comments', commentsRouter);
 
 app.listen(5000, () => console.log('listening on port 5000'));
