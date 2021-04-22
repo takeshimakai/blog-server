@@ -46,7 +46,7 @@ exports.postSignUpForm = [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res.json(errors);
+      res.status(400).json(errors);
     } else {
       bcrypt.hash(req.body.password, 10, (err, hashedPw) => {
         if (err) {

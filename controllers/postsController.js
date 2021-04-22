@@ -41,7 +41,7 @@ exports.createPost = [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res.json(errors);
+      res.status(400).json(errors);
     } else {
       new Post({
         title: req.body.title,
@@ -76,17 +76,17 @@ exports.updatePost = [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res.json(errors);
+      res.status(400).json(errors);
     } else {
       const editedPost = new Post({
         _id: req.params.postId,
         title: req.body.title,
         content: req.body.content,
-        published: req.body.published === 'true' ? true : false,
-        datePublished: published ? Date.now() : null
+        published: req.body.published,
+        datePublished: req.body.published ? Date.now() : null
       });
 
-      Post.findByIdAndUpdate(req.params.id, editedPost, (err) => {
+      Post.findByIdAndUpdate(req.params.postId, editedPost, (err) => {
         if (err) return next(err);
         res.sendStatus(200);
       })
