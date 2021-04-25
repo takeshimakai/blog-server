@@ -47,7 +47,8 @@ exports.createPost = [
         title: req.body.title,
         content: req.body.content,
         published: req.body.published,
-        datePublished: req.body.published ? Date.now() : null
+        datePublished: req.body.published ? Date.now() : null,
+        dateCreated: Date.now()
       }).save(err => {
         if (err) {
           next(err);
